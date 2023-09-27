@@ -15,30 +15,33 @@ for i=1:length(x_tless)
     xtless(i) = x_tless(length(x_tless)-i+1);
 end
 tless_s= -length(xtless):1:-1;
-%time scaling where t==>a*t
-tless_scale = tless_s/a;
-tgreate_s = 1:length(x_tgreater);
-tgreate_scale = tgreate_s/a;
-%finalized array of time
-t_scale = [tless_scale,0,tgreate_scale];
-%just writng responses of signal
-x_scaling = [x_tless,origin,x_tgreater];
-%shifting the time t==>t+/-b
-tsacle_final =[tless_scale-b,0-b,tgreate_scale-b];
-t =[tless_s,0,tgreate_s];
-%plotting graph
+tgreter_s = 1:1:length(x_tgreater);
+t_shifting = [tless_s-b,0-b,tgreter_s-b];
+x_tshifting = [x_tless,0,x_tgreater];
+t= [tless_s,0,tgreter_s];
+t_s= t_shifting/a;
+
+k=1;
+t_integers = t_s(floor(t_s) == t_s);
+for j = t_integers
+    index_t_s(k)= find(t_s == j);
+    k=k+1;
+end
+for l =1:length(index_t_s)
+    x_sc(l) = x_tshifting(index_t_s(l));
+end
 figure;
 subplot(1, 3, 1);
 stem(t,x,'LineWidth',2,'MarkerFaceColor','red','MarkerEdgeColor','green');
 xlabel('X[t]');
 ylabel('time');
 subplot(1, 3, 2);
-stem(t_scale,x_scaling,'LineWidth',2,'MarkerFaceColor','red','MarkerEdgeColor','green');
-xlabel('X[at]');
+stem(t_shifting ,x_tshifting,'LineWidth',2,'MarkerFaceColor','red','MarkerEdgeColor','green');
+xlabel('X[t+b]');
 ylabel('time');
-title('scaling');
+title('shifting');
 subplot(1, 3, 3);
-stem(tsacle_final,x_scaling,'LineWidth',2,'MarkerFaceColor','red','MarkerEdgeColor','green');
+stem(t_integers,x_sc,'LineWidth',2,'MarkerFaceColor','red','MarkerEdgeColor','green');
 xlabel('X[at+b]');
 ylabel('time');
 title('final=Scaling +Shifting');
